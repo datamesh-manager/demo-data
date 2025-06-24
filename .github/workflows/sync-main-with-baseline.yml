@@ -1,0 +1,101 @@
+name: Sync Main with Baseline Branch
+
+on:
+  # Run on schedule (every day at 2 AM UTC)
+  schedule:
+    - cron: '0 2 * * *'
+  
+  # Run on demand via workflow_dispatch
+  workflow_dispatch:
+
+  # Run on push to baseline branch
+  push:
+    branches:
+      - baseline
+
+jobs:
+  sync-main-branch:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Configure Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+      
+      - name: Check if baseline branch exists
+        id: check_baseline
+        run: |
+          if git ls-remote --heads origin baseline | grep -q baseline; then
+            echo "baseline_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "baseline_exists=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Skip if baseline branch doesn't exist
+        if: steps.check_baseline.outputs.baseline_exists != 'true'
+        run: |
+          echo "Baseline branch 'baseline' does not exist. Skipping sync."
+          exit 0
+      
+      - name: Fetch all branches
+        run: git fetch origin
+      
+      - name: Checkout main branch
+        run: |
+          git checkout main
+          git pull origin main
+      
+      - name: Get current main commit
+        id: main_commit
+        run: echo "main_commit=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+      
+      - name: Get baseline branch commit
+        id: baseline_commit
+        run: echo "baseline_commit=$(git rev-parse origin/baseline)" >> $GITHUB_OUTPUT
+      
+      - name: Check if sync is needed
+        id: sync_needed
+        run: |
+          if [ "${{ steps.main_commit.outputs.main_commit }}" != "${{ steps.baseline_commit.outputs.baseline_commit }}" ]; then
+            echo "sync_needed=true" >> $GITHUB_OUTPUT
+          else
+            echo "sync_needed=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Skip if no sync needed
+        if: steps.sync_needed.outputs.sync_needed != 'true'
+        run: |
+          echo "Main branch is already in sync with baseline branch. No action needed."
+          exit 0
+      
+      - name: Sync main with baseline branch
+        if: steps.sync_needed.outputs.sync_needed == 'true'
+        run: |
+          echo "Syncing main branch with baseline branch..."
+          
+          # Reset main to match baseline branch exactly
+          git reset --hard origin/baseline
+          
+          # Force push to main branch
+          git push origin main --force
+          
+          echo "Successfully synced main branch with baseline branch"
+      
+      - name: Create sync summary
+        if: steps.sync_needed.outputs.sync_needed == 'true'
+        run: |
+          echo "## Sync Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **From:** baseline branch" >> $GITHUB_STEP_SUMMARY
+          echo "- **To:** main branch" >> $GITHUB_STEP_SUMMARY
+          echo "- **Previous main commit:** ${{ steps.main_commit.outputs.main_commit }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **New main commit:** ${{ steps.baseline_commit.outputs.baseline_commit }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Triggered by:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Main branch has been successfully synced with the baseline branch." 

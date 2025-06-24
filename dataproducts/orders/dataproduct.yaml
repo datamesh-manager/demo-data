@@ -1,0 +1,137 @@
+dataProductSpecification: 0.0.1
+id: orders
+info:
+  title: Orders
+  description: Successful customer orders in the webshop. All orders since 2020-01-01.
+  owner: sales-team
+  status: active
+  archetype: source-aligned
+  icon: snowflake
+inputPorts: []
+outputPorts:
+  - id: snowflake_orders_pii_v1
+    name: Orders PII
+    description: All order-created events, with PII.
+    type: snowflake
+    version: 1
+    environment: prod
+    server:
+      account: lmtabcd-xn12345
+      database: ORDER_DB
+      schema: ORDERS_PII_V1
+    status: retired
+    autoApprove: false
+    containsPii: true
+    links:
+      Snowflake WebUI: https://app.snowflake.com/xxx/yyy/#/data/databases/ORDER_DB/schemas/ORDERS_PII_V1
+    custom:
+      platformRole: op_orders_snowflake_orders_pii_v1_role
+    assets: [ ]
+  - id: snowflake_orders_pii_v1_dev
+    name: Orders PII
+    description: All order-created events, with PII.
+    type: snowflake
+    version: 1
+    environment: dev
+    server:
+      schema: ORDERS_PII_V1
+      account: lmtabcd-xn12345-dev
+      database: ORDER_DB
+    status: retired
+    autoApprove: false
+    containsPii: true
+    custom:
+      platformRole: op_orders_snowflake_orders_pii_v1_role
+    assets: [ ]
+  - id: snowflake_orders_pii_v2
+    name: Orders PII
+    description: All order-created events, with PII.
+    type: snowflake
+    version: 2
+    environment: prod
+    server:
+      account: lmtrwxs-xn14859
+      database: ORDER_DB
+      schema: ORDERS_PII_V2
+    status: active
+    autoApprove: false
+    containsPii: true
+    dataContractId: snowflake_orders_pii_v2
+    links:
+      Snowflake WebUI: https://app.snowflake.com/lmtrwxs/xn14859/#/data/databases/ORDER_DB/schemas/ORDERS_PII_V2/tables
+    custom:
+      platformRole: op_orders_snowflake_orders_pii_v2_role
+    assets: []
+    tags:
+      - location:EU
+      - datacontracttests:enabled
+  - id: snowflake_orders_pii_v2_dev
+    name: Orders PII
+    description: All order-created events, with PII.
+    type: snowflake
+    version: 2
+    environment: dev
+    server:
+      schema: ORDERS_PII_V2
+      account: lmtabcd-xn12345-dev
+      database: ORDER_DB
+    status: active
+    autoApprove: false
+    containsPii: true
+    custom:
+      platformRole: op_orders_snowflake_orders_pii_v2_role
+    assets: [ ]
+  - id: snowflake_orders_npii_v3
+    name: Orders NPII
+    description: All order-created events, PII removed.
+    type: snowflake
+    version: 3
+    environment: prod
+    server:
+      account: lmtabcd-xn12345
+      database: ORDER_DB
+      schema: ORDERS_NPII_V3
+    status: in development
+    autoApprove: false
+    containsPii: false
+    assets: []
+  - id: snowflake_orders_npii_v2
+    name: Orders NPII
+    description: All order-created events, PII removed.
+    type: snowflake
+    version: 2
+    environment: prod
+    server:
+      account: lmtabcd-xn12345
+      database: ORDER_DB
+      schema: ORDERS_NPII_V2
+    status: deprecated
+    autoApprove: false
+    containsPii: false
+    dataContractId: snowflake_orders_npii_v2
+    custom:
+      platformRole: op_orders_snowflake_orders_npii_v2_role
+    assets: []
+  - id: snowflake_orders_npii_v1
+    name: Orders NPII
+    description: All order-created events, PII removed.
+    type: snowflake
+    version: 1
+    environment: prod
+    server:
+      account: lmtabcd-xn12345
+      database: ORDER_DB
+      schema: ORDERS_NPII_V1
+    status: retired
+    autoApprove: false
+    containsPii: false
+    custom:
+      platformRole: op_orders_snowflake_orders_npii_v1_role
+    assets: []
+tags:
+  - demo
+  - featured
+links: {}
+custom:
+  platformRole: dp_orders_role
+assets: []

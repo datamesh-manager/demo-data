@@ -407,6 +407,12 @@ ontology:
     multiplicity: "OneToMany"
     verbalizes:
     - "{Customer} places {Order}"
+- concept: "Foo"
+  id: "customers/foo"
+  type: "EntityType"
+  status: "active"
+  owner: "governance-group"
+  group: "customers"
 - concept: "Line Item"
   id: "line_item"
   type: "EntityType"

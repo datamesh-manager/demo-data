@@ -773,36 +773,6 @@ ontology:
   id: "smoke_test_concept"
   type: "EntityType"
   description: "Added on the git side of the mirror during the smoke test."
-- concept: "Subscription"
-  id: "subscription"
-  type: "EntityType"
-  description: "A recurring agreement entitling a customer to a service for a fixed term."
-  group: "customers"
-  custom_properties:
-    name@de: "Abonnement"
-    description@de: "Eine wiederkehrende Vereinbarung, die einem Kunden für eine feste Laufzeit eine Leistung zusichert."
-  relationships:
-  - id: "subscription.cancelled_at"
-    name: "cancelled_at"
-    roles:
-    - concept: "cancelled_at"
-    verbalizes:
-    - "{Subscription} has {cancelled_at}"
-    type: "hasProperty"
-  - id: "subscription.started_at"
-    name: "started_at"
-    roles:
-    - concept: "started_at"
-    verbalizes:
-    - "{Subscription} has {started_at}"
-    type: "hasProperty"
-  - id: "subscription.term"
-    name: "term"
-    roles:
-    - concept: "term"
-    verbalizes:
-    - "{Subscription} has {term}"
-    type: "hasProperty"
 - concept: "Average Order Value"
   id: "average_order_value"
   type: "MetricType"
@@ -1064,12 +1034,6 @@ ontology:
     name@fr: "Marque"
     description@de: "Marke, zu der das Produkt gehört."
     description@fr: "Marque à laquelle appartient le produit."
-- concept: "cancelled_at"
-  id: "subscription.cancelled-at"
-  type: "ValueType"
-  description: "The date the customer cancelled, if they have. Empty while the subscription runs."
-  extends:
-  - "Date"
 - concept: "carrier"
   id: "shipment.carrier"
   type: "ValueType"
@@ -1532,12 +1496,6 @@ ontology:
     name@fr: "Taille"
     description@de: "Größenvariante unter Verwendung des für die Produktkategorie passenden Größensystems."
     description@fr: "Variante de taille, utilisant le système de tailles adapté à la catégorie de produit."
-- concept: "started_at"
-  id: "subscription.started-at"
-  type: "ValueType"
-  description: "The date the subscription first became active."
-  extends:
-  - "Date"
 - concept: "street"
   id: "postal_address.street"
   type: "ValueType"
@@ -1579,17 +1537,6 @@ ontology:
     name@fr: "Taux de TVA"
     description@de: "Geltender Umsatzsteuersatz als Dezimalbruch (z. B. 0,19 für 19 %)."
     description@fr: "Taux de TVA applicable sous forme de fraction décimale (p. ex. 0,19 pour 19 %)."
-- concept: "term"
-  id: "subscription.term"
-  type: "ValueType"
-  description: "The billing period the subscription renews on."
-  extends:
-  - "String"
-  examples:
-  - "annual"
-  enum:
-  - "monthly"
-  - "annual"
 - concept: "title"
   id: "product.title"
   type: "ValueType"
@@ -1657,7 +1604,3 @@ ontology:
     name@fr: "Numéro de TVA"
     description@de: "Umsatzsteuer-Identifikationsnummer für Geschäftsrechnungen (EU-VIES-Format)."
     description@fr: "Numéro d'identification à la TVA fourni pour les factures professionnelles (format VIES UE)."
-- concept: "Reviewer Concept"
-  id: "reviewer_concept"
-  type: "EntityType"
-  description: "Added by a reviewer on the request's branch."

@@ -762,6 +762,10 @@ ontology:
     verbalizes:
     - "{Shipping Address} has {delivery_instructions}"
     type: "hasProperty"
+- concept: "Smoke Test Concept"
+  id: "smoke_test_concept"
+  type: "EntityType"
+  description: "Added on the git side of the mirror during the smoke test."
 - concept: "Average Order Value"
   id: "average_order_value"
   type: "MetricType"
@@ -862,40 +866,6 @@ ontology:
     - concept: "Order"
     verbalizes:
     - "{Contribution Margin 2} measures {Order}"
-    type: "measures"
-- concept: "Contribution Margin 3"
-  id: "contribution_margin_3"
-  type: "MetricType"
-  description: |-
-    CM2 minus the impact of returns (refunded revenue and return-handling costs).
-    The most realistic view of per-order profitability for ecommerce businesses.
-  iri: "http://www.entropy-data.com/ns/main/ContributionMargin3"
-  group: "controlling"
-  unit: "EUR"
-  better_when: "higher"
-  formula: "CM2 - refunded_revenue - return_handling_costs"
-  custom_properties:
-    abbreviation: "CM3"
-    name@de: "Deckungsbeitrag 3"
-    name@fr: "Marge de contribution 3"
-    description@de: "DB2 abzüglich der Auswirkungen von Retouren (erstattete Umsätze und Retourenabwicklungskosten). Die realistischste Sicht auf die Profitabilität je Bestellung im E-Commerce."
-    description@fr: "MC2 moins l'impact des retours (chiffre d'affaires remboursé et coûts de traitement des retours). La vision la plus réaliste de la rentabilité par commande en e-commerce."
-  relationships:
-  - id: "cm3_derived_from_cm2"
-    name: "derived_from"
-    description: "Contribution Margin 3 is CM2 minus the impact of returns."
-    roles:
-    - concept: "Contribution Margin 2"
-    verbalizes:
-    - "{Contribution Margin 3} derived from {Contribution Margin 2}"
-    type: "derived_from"
-  - id: "cm3_measures_order"
-    name: "measures"
-    description: "Contribution Margin 3 is measured per order."
-    roles:
-    - concept: "Order"
-    verbalizes:
-    - "{Contribution Margin 3} measures {Order}"
     type: "measures"
 - concept: "Conversion Rate"
   id: "conversion_rate"
@@ -1406,7 +1376,7 @@ ontology:
 - concept: "order_status"
   id: "order.order-status"
   type: "ValueType"
-  description: "Lifecycle state of the order."
+  description: "Lifecycle state of the order. An order that never shipped is cancelled; one that shipped and came back is returned, whole or in part."
   extends:
   - "String"
   examples:
@@ -1418,10 +1388,11 @@ ontology:
   - "delivered"
   - "cancelled"
   - "returned"
+  - "partially_returned"
   custom_properties:
     name@de: "Bestellstatus"
     name@fr: "Statut de la commande"
-    description@de: "Lebenszyklusstatus der Bestellung."
+    description@de: "Lebenszyklusstatus der Bestellung. Eine Bestellung, die nie versandt wurde, ist storniert; eine versandte und zurückgesandte ist retourniert, ganz oder teilweise."
     description@fr: "État du cycle de vie de la commande."
 - concept: "placed_at"
   id: "order.placed-at"
